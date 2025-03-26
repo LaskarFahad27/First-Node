@@ -5,7 +5,40 @@ const Register =()=> {
     const [name, setName] = useState("");
        const [phone, setPhone] = useState("");
        const [password, setPassword] = useState("");
-       const [agreement, setAgreement] = useState("false");
+       const [agreement, setAgreement] = useState(false);
+
+       const handleSubmit = async () => {
+        if (!name || !phone || !password) {
+            alert("Please fill all fields and accept the terms.");
+            return;
+        }
+
+        const userData = {
+            name,
+            phone,
+            password
+        };
+
+        try {
+          const response = await fetch("http://localhost:3000/register", { 
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(userData)
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                alert("Registration successful!");
+            } else {
+                alert(`Error: ${result.message}`);
+            }
+        } catch (error) {
+            alert("Something went wrong. Please try again.");
+            console.error(error);
+        }
+    };
       return (
         <div className="page">
           <div className="field">
@@ -21,7 +54,7 @@ const Register =()=> {
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
             />
-           <input type="text" 
+           <input type="password" 
                   id="password" 
                   placeholder='Enter Your Password'
                   value={password}
@@ -32,11 +65,11 @@ const Register =()=> {
            <label htmlFor="agreement" 
                   className="statement"
                   value={agreement}
-                  onChange={(e) => setAgreement(e.target.value)} >
+                  onChange={(e) => setAgreement(e.target.checked)} >
                   I agree to the terms and conditions
             </label>
            </div><br/>
-           <button id="submitBtn">Submit</button>
+           <button id="submitBtn" onClick={handleSubmit}>Submit</button>
           </div>
         </div>
       )
