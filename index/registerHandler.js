@@ -1,14 +1,24 @@
 const handler = {};
 
 handler.registerHandler = (requestProperties, callback) => {
+    const req = requestProperties.req;
+    const res = requestProperties.res;
 
-    const req = requestProperties.req; 
-
-    if (!req) {
-        return callback(500, { message: "Request object is missing." });
+    if (!req || !res) {
+        return callback(500, { message: "Request or Response object is missing." });
     }
-    let body = "";
 
+    // CORS headers
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+    // Handle preflight request
+    if (req.method === "OPTIONS") {
+        return callback(200, {});
+    }
+
+    let body = "";
 
     req.on("data", (chunk) => {
         body += chunk.toString();
@@ -17,7 +27,6 @@ handler.registerHandler = (requestProperties, callback) => {
     req.on("end", () => {
         try {
             const parsedData = JSON.parse(body);
-
             const { name, phone, password } = parsedData;
 
             if (!name || !phone || !password) {
