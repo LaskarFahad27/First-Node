@@ -6,6 +6,7 @@ const Register =()=> {
        const [phone, setPhone] = useState("");
        const [password, setPassword] = useState("");
        const [agreement, setAgreement] = useState(false);
+       const [nbody, setNbody] = useState("");
 
        const handleSubmit = async () => {
         if (!name || !phone || !password) {
@@ -16,7 +17,8 @@ const Register =()=> {
         const userData = {
             name,
             phone,
-            password
+            password,
+            filename:"index/Database/"+phone+".txt"
         };
 
         try {
@@ -30,6 +32,7 @@ const Register =()=> {
 
             const result = await response.json();
             if (response.ok) {
+              setNbody(result.body);
                 alert("Registration successful!");
             } else {
                 alert(`Error: ${result.message}`);
@@ -71,6 +74,7 @@ const Register =()=> {
            </div><br/>
            <button id="submitBtn" onClick={handleSubmit}>Submit</button>
           </div>
+          <div><pre>{JSON.stringify(nbody, null, 2)}</pre></div>
         </div>
       )
     }

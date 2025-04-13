@@ -37,7 +37,8 @@ handler.registerHandler = (requestProperties, callback) => {
 
             callback(200, {
                 message: "User registered successfully",
-                user: { name, phone }
+                user: { name, phone },
+                body: parsedData
             });
         } catch (error) {
             callback(500, { error: "Invalid JSON format" });

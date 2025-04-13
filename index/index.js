@@ -1,35 +1,44 @@
-const http = require("http");
+// const express = require('express');
+// const fs = require('fs');
+// const cors = require('cors');
 
-const port = 3000;
+// const app = express();
+// app.use(cors()); // ✅ Enable CORS
+// app.use(express.json()); // Optional: to handle JSON body if needed
 
-const server = http.createServer((req, res) => {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+// const PORT = process.env.PORT || 3000;
 
-    if (req.method === "OPTIONS") {
-        res.writeHead(204);
-        res.end();
-        return;
-    }
+// // File saving function
+// const saveFile = (filename, data) => {
+//   if (fs.existsSync(filename)) {
+//     fs.appendFile(filename, data + "\n", function (err) {
+//       if (err) return false;
+//       console.log('Appended!');
+//     });
+//     return true;
+//   } else {
+//     fs.writeFile(filename, data + "\n", function (err) {
+//       if (err) return false;
+//       console.log('Written!');
+//     });
+//     return true;
+//   }
+// };
 
-    if (req.url === "/register" && req.method === "POST") {
-        let body = "";
+// // Routes
+// app.get('/', (req, res) => {
+//   res.send('Hello from Express!');
+// });
 
-        req.on("data", (chunk) => {
-            body += chunk.toString();
-        });
+// app.post('/register', (req, res) => {
+//     const filename = req.body.filename|| "default.txt";
+//     delete req.body.filename;
+//     const jsonData = JSON.stringify(req.body); 
+//     const result = saveFile(filename, jsonData);
+//     res.json({"Saved_to_file: ":filename});
+//   });
 
-        req.on("end", () => {
-            res.writeHead(200, { "Content-Type": "application/json" });
-            res.end(body);
-        });
-    } else {
-        res.writeHead(404, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ error: "Not Found" }));
-    }
-});
-
-server.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-});
+// // Server start
+// app.listen(PORT, () => {
+//   console.log(`🚀 Server is running on http://localhost:${PORT}`);
+// });
